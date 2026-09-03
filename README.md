@@ -63,4 +63,14 @@ npm run dev
 Notes
 - The repository includes a Prisma schema at `backend/prisma/schema.prisma` and an initial SQL migration at `backend/prisma/migrations/0001_init/migration.sql`.
 - The seed script is `backend/prisma/seed.js` and creates roles, permissions, and demo users with bcrypt-hashed passwords. Default demo password for seeded users is `Password123!` (hashed in DB).
+
+Login API
+
+POST /api/auth/login
+- Request JSON: `{ "email": "admin@example.com", "password": "Password123!" }`
+- Response: `{ "token": "...", "user": { "id": "...", "email": "..." } }`
+
+GET /api/auth/me
+- Header: `Authorization: Bearer <token>`
+- Response: `{ "id": "..", "email": ".." }`
 - Do not run migrations or seed scripts on production without reviewing them.
