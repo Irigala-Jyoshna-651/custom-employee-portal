@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  roles     UserRole[]
+  auditLogs AuditLog[] @relation("performedBy")
+}
+
+model Role {
+  id          String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String          @unique
+  userRoles   UserRole[]
+  permissions RolePermission[]
+}
+
+model Permission {
+  id    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name  String           @unique
+  roles RolePermission[]
+}
+
+model UserRole {
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @db.Uuid
+  role   Role   @relation(fields: [roleId], references: [id])
+  roleId String @db.Uuid
+
+  @@id([userId, roleId])
+}
+
+model RolePermission {
+  role         Role   @relation(fields: [roleId], references: [id])
+  roleId       String @db.Uuid
+  permission   Permission @relation(fields: [permissionId], references: [id])
+  permissionId String @db.Uuid
+
+  @@id([roleId, permissionId])
+}
+
+model AuditLog {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  action      String
+  entity      String
+  entityId    String
+  performedBy User?    @relation("performedBy", fields: [performedById], references: [id])
+  performedById String? @db.Uuid
+  meta        Json?
+  createdAt   DateTime @default(now())
+}
