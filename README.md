@@ -91,3 +91,19 @@ Test endpoints
 
 Unauthorized access attempts are recorded in the audit logs with action `AUTHZ_FAILED`.
 - Do not run migrations or seed scripts on production without reviewing them.
+
+## Security & Final Notes
+
+- Passwords are hashed with bcrypt and plaintext passwords are never stored.
+- `JWT_SECRET`, Zoho client secret, and refresh tokens must be set in `backend/.env` and must never be committed to the repository.
+- `backend/.env.example` contains placeholder values — copy to `backend/.env` and populate real secrets.
+- CORS is restricted to `FRONTEND_URL` set in `backend/.env`.
+- Helmet is enabled to set secure HTTP headers.
+- Rate limiting is applied to reduce brute-force attempts.
+- Zoho integration supports a safe demo mode via `ZOHO_DEMO_MODE=true`.
+
+## Final checklist before demo
+
+1. Ensure `backend/.env` has `DATABASE_URL`, `JWT_SECRET`, and (optional) Zoho env vars.
+2. Run migrations and seed: `npx prisma migrate dev --name init && npm run seed`.
+3. Start backend and frontend and follow the demo guide in `DEMO_GUIDE.md`.
