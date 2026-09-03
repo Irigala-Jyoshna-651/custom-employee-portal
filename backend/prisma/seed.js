@@ -40,6 +40,26 @@ async function main() {
     });
   }
 
+  // Assign sensible defaults for other roles (demo)
+  const roleDefaults = {
+    HR: ['zoho.people.access'],
+    Sales: ['zoho.crm.access'],
+    Support: ['zoho.desk.access'],
+    Finance: ['zoho.books.access']
+  };
+
+  for (const [roleName, permsList] of Object.entries(roleDefaults)) {
+    for (const pname of permsList) {
+      const perm = permissions[pname];
+      if (!perm) continue;
+      await prisma.rolePermission.upsert({
+        where: { roleId_permissionId: { roleId: roles[roleName].id, permissionId: perm.id } },
+        update: {},
+        create: { roleId: roles[roleName].id, permissionId: perm.id }
+      });
+    }
+  }
+
   // Demo users
   const demoUsers = [
     { email: 'admin@example.com', role: 'Admin' },
@@ -50,7 +70,13 @@ async function main() {
   ];
 
   for (const userDef of demoUsers) {
-    const hashed = await bcrypt.hash('Password123!', 10);
+    // Use DEMO_PASSWORD from env when available; otherwise generate a random demo password locally.
+    const demoPassword = process.env.DEMO_PASSWORD || (() => {
+      const p = require('crypto').randomBytes(8).toString('hex');
+      console.warn('DEMO_PASSWORD not set; generated local demo password:', p);
+      return p;
+    })();
+    const hashed = await bcrypt.hash(demoPassword, 10);
     const user = await prisma.user.upsert({
       where: { email: userDef.email },
       update: { password: hashed },
