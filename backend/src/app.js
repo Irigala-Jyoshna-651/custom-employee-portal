@@ -2,6 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const testRoutes = require('./routes/test');
+const adminUsers = require('./routes/admin/users');
+const adminRoles = require('./routes/admin/roles');
+const adminPermissions = require('./routes/admin/permissions');
+const adminAudit = require('./routes/admin/audit');
 
 const app = express();
 
@@ -14,6 +18,10 @@ app.get('/api/health', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/test', testRoutes);
+app.use('/api/users', adminUsers);
+app.use('/api/roles', adminRoles);
+app.use('/api/permissions', adminPermissions);
+app.use('/api/audit-logs', adminAudit);
 
 // Basic error handler
 app.use((err, req, res, next) => {
