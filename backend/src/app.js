@@ -6,6 +6,7 @@ const adminUsers = require('./routes/admin/users');
 const adminRoles = require('./routes/admin/roles');
 const adminPermissions = require('./routes/admin/permissions');
 const adminAudit = require('./routes/admin/audit');
+const zohoRoutes = require('./routes/zoho');
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use('/api/users', adminUsers);
 app.use('/api/roles', adminRoles);
 app.use('/api/permissions', adminPermissions);
 app.use('/api/audit-logs', adminAudit);
+app.use('/api/zoho', zohoRoutes);
 
 // Basic error handler
 app.use((err, req, res, next) => {

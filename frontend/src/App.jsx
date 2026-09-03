@@ -11,6 +11,7 @@ import AdminUsers from './pages/admin/Users'
 import AdminRoles from './pages/admin/Roles'
 import AdminPermissions from './pages/admin/Permissions'
 import AuditLogs from './pages/admin/AuditLogs'
+import AppView from './pages/AppView'
 
 export default function App(){
   return (
@@ -21,6 +22,7 @@ export default function App(){
           <Route path="/login" element={<Login/>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />
           <Route path="/" element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />
+          <Route path="/app/:app" element={<ProtectedRoute><AppView/></ProtectedRoute>} />
 
           <Route path="/admin" element={<AdminRoute><Admin/></AdminRoute>} />
           <Route path="/admin/users" element={<AdminRoute><AdminUsers/></AdminRoute>} />

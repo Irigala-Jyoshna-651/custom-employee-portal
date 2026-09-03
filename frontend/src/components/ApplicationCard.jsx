@@ -9,7 +9,7 @@ export default function ApplicationCard({ app }){
         <p>{app.desc}</p>
       </div>
       <div className="actions">
-        <button>Open</button>
+        <a href={`/app/${app.key}`}><button>Open</button></a>
       </div>
     </div>
   )
