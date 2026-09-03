@@ -73,4 +73,21 @@ POST /api/auth/login
 GET /api/auth/me
 - Header: `Authorization: Bearer <token>`
 - Response: `{ "id": "..", "email": ".." }`
+
+RBAC / Permissions
+
+This project implements backend role-based access control (RBAC) using the database models (`Role`, `Permission`, `UserRole`, `RolePermission`).
+
+Middleware
+- `requireAuth`: verifies JWT and loads user's roles and permissions from the DB
+- `requireRole(roleName)`: requires a specific role (Admin bypasses)
+- `requirePermission(permissionName)`: requires a specific permission (Admin bypasses)
+
+Test endpoints
+- `GET /api/test/people` — requires `zoho.people.access`
+- `GET /api/test/crm` — requires `zoho.crm.access`
+- `GET /api/test/desk` — requires `zoho.desk.access`
+- `GET /api/test/finance` — requires `zoho.books.access`
+
+Unauthorized access attempts are recorded in the audit logs with action `AUTHZ_FAILED`.
 - Do not run migrations or seed scripts on production without reviewing them.
