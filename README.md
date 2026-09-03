@@ -102,6 +102,14 @@ Unauthorized access attempts are recorded in the audit logs with action `AUTHZ_F
 - Rate limiting is applied to reduce brute-force attempts.
 - Zoho integration supports a safe demo mode via `ZOHO_DEMO_MODE=true`.
 
+## Zoho integration (architecture note)
+
+- Backend acts as the integration point for Zoho services. For production you should register a Zoho OAuth app and store `ZOHO_CLIENT_ID`, `ZOHO_CLIENT_SECRET`, and `ZOHO_REFRESH_TOKEN` securely in environment variables or secrets manager. The backend helper `backend/src/lib/zoho.js` manages token refresh and exposes safe proxy endpoints.
+
+## Demo instructions
+
+- Follow `DEMO_GUIDE.md` for a 3-5 minute demonstration flow that covers Admin, RBAC, Audit Logs, Zoho demo-mode, and logout. Demo credentials are intentionally provided there for local testing only. NEVER commit real secret values.
+
 ## Final checklist before demo
 
 1. Ensure `backend/.env` has `DATABASE_URL`, `JWT_SECRET`, and (optional) Zoho env vars.
